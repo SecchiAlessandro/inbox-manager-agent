@@ -54,6 +54,9 @@ agent = initialize_agent(
     memory=memory,
 )
 
+class Email(BaseModel):
+    from_email: str
+    content: str
 
 @app.post("/")
 def analyse_email():
