@@ -15,6 +15,9 @@ from pydantic import BaseModel
 
 
 app = FastAPI()
+@app.post("/")
+
+
 load_dotenv(find_dotenv())
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 llm = ChatOpenAI(temperature=0, model="gpt-4-0613")
@@ -55,14 +58,11 @@ agent = initialize_agent(
 )
 
 
-@app.post("/")
-def analyse_email():
 
-    test_email = """
-    Hi, I would like to propose you a collaboration. I have 1 million investment funds. My name is Mind the Bridge
-    and I am based in SF. Are you interested?
+test_email = """
+Hi, I would like to propose you a collaboration. I have 1 million investment funds. My name is Mind the Bridge
+and I am based in SF. Are you interested?
+"""
 
-    """
-
-    agent({"input": test_email})
+agent({"input": test_email})
 

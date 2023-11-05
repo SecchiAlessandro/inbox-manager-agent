@@ -374,7 +374,7 @@ class ProspectResearchTool(BaseTool):
 
 def escalate(original_email_address: str, message: str, additional_context: str):
     # URL to send the POST request to
-    url = 'https://hooks.zapier.com/hooks/catch/16776116/3zt65ex/'
+    url = 'https://hooks.zapier.com/hooks/catch/16776116/3zt0f7t/'
 
     # Data to send in the POST request
     data = {
@@ -420,7 +420,7 @@ def reply_email(message: str, email_address: str, subject: str):
     return f"An email has been sent to {email_address}"
 
     # URL to send the POST request to
-    url = 'https://hooks.zapier.com/hooks/catch/15616669/38qaaau/'
+    url = 'https://hooks.zapier.com/hooks/catch/16776116/3zt0f7t/'
 
     # Data to send in the POST request
     data = {
@@ -463,7 +463,7 @@ class ReplyEmailTool(BaseTool):
 # CREATE EMAIL DRAFT
 def create_email_draft(prospect_email_address: str, subject: str, generated_reply: str):
     # URL to send the POST request to
-    url = 'https://hooks.zapier.com/hooks/catch/15616669/38ikw12/'
+    url = 'https://hooks.zapier.com/hooks/catch/16776116/3zt0f7t/'
 
     # Data to send in the POST request
     data = {
