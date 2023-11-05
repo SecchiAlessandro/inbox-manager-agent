@@ -1,5 +1,6 @@
-from dotenv import find_dotenv, load_dotenv
-
+import os
+from dotenv import load_dotenv, find_dotenv
+import openai
 from langchain.agents import initialize_agent
 from langchain.agents import AgentType
 from langchain.chat_models import ChatOpenAI
@@ -8,9 +9,16 @@ from langchain.memory import ConversationSummaryBufferMemory
 from langchain.chains.summarize import load_summarize_chain
 from langchain.schema import SystemMessage
 from custom_tools import CreateEmailDraftTool, GenerateEmailResponseTool, ReplyEmailTool, EscalateTool, ProspectResearchTool, CategoriseEmailTool
+from fastapi import FastAPI
+from pydantic import BaseModel
 
-load_dotenv()
-llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613")
+
+
+app = FastAPI()
+load_dotenv(find_dotenv())
+openai.api_key = os.environ.get("OPENAI_API_KEY")
+llm = ChatOpenAI(temperature=0, model="gpt-4-0613")
+
 
 system_message = SystemMessage(
     content="""
@@ -47,8 +55,14 @@ agent = initialize_agent(
 )
 
 
-test_email = """
-xxxxxxx
-"""
+@app.post("/")
+def analyse_email():
 
-agent({"input": test_email})
+    test_email = """
+    Hi, I would like to propose you a collaboration. I have 1 million investment funds. My name is Mind the Bridge
+    and I am based in SF. Are you interested?
+
+    """
+
+    agent({"input": test_email})
+

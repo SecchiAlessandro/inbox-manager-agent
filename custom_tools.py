@@ -20,7 +20,7 @@ from langchain.schema import SystemMessage
 
 load_dotenv(find_dotenv())
 openai.api_key = os.environ.get("OPENAI_API_KEY")
-llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-16k-0613")
+llm = ChatOpenAI(temperature=0, model="gpt-4-0613")
 
 
 # CATEGORISE EMAIL
@@ -83,7 +83,7 @@ def categorise_email(lates_reply: str):
         all_needs_collected = check_consulting_email(lates_reply)
         if all_needs_collected == "YES":
             return {
-                "Step 1": """Forward the email to jason.zhou.design@gmail.com, with summary of 1.What's the problem the prospect is trying to solve?  2.Their budget"""
+                "Step 1": """Forward the email to alessandrosecchi@hotmail.it, with summary of 1.What's the problem the prospect is trying to solve?  2.Their budget"""
             }
         else:
             return {
@@ -94,7 +94,7 @@ def categorise_email(lates_reply: str):
         if category == "COLLABORATION/SPONSORSHIP":
             return {
                 "Step 1": "Research about the prospect & company",
-                "Step 2": "Forward the email to jason.zhou.design@gmail.com, with the research results included"
+                "Step 2": "Forward the email to alessandrosecchi@hotmail.it, with the research results included"
             }
         else:
             if category == "NON_REPLY":
@@ -123,29 +123,68 @@ class CategoriseEmailTool(BaseTool):
             "get_stock_performance does not support async")
 
 
-# WRITE EMAIL
+#WRITE EMAIL
+# def generate_email_response(email_thread: str, category: str):
+#     # URL endpoint
+#     url = "https://api-d7b62b.stack.tryrelevance.com/latest/studios/740b2ead-8235-4f1c-a26b-a78b07b672e5/trigger_limited"
+#
+#     # Headers
+#     headers = {
+#         "Content-Type": "application/json"
+#     }
+#
+#     # Payload (data)
+#     data = {
+#         "params": {
+#             "client_email": email_thread,
+#             "goal": "write email response" if category != "CONSULTING FOLLOW UP" else "for each consulting email, we need to collect 1. Their use case & problem they are trying to solve 2. Their budget; Try to collect those info from them",
+#         },
+#         "project": "f86edbc1-fcb6-41f9-b9b6-be14a6f06412"
+#     }
+#
+#     # Send POST request
+#     response = requests.post(url, headers=headers, json=data)
+#
+#     return response.text
+
 def generate_email_response(email_thread: str, category: str):
-    # URL endpoint
-    url = "https://api-f1db6c.stack.tryrelevance.com/latest/studios/6af484b0-a8bf-4545-91b8-75d46ac8f354/trigger_limited"
+    # URL endpoint for OpenAI
+    url = "https://api.openai.com/v1/engines/davinci-codex/completions"
 
-    # Headers
+    # OpenAI API key
+    api_key = os.getenv("OPENAI_API_KEY")
+
+    # Headers with OpenAI API key
     headers = {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
     }
 
-    # Payload (data)
+    # Adjusted payload for OpenAI API
+    prompt_text = email_thread
+    if category == "CONSULTING FOLLOW UP":
+        prompt_text += "\n\nFor each consulting email, we need to collect 1. Their use case & problem they are trying to solve 2. Their budget; Try to collect those info from them."
+    else:
+        prompt_text += "\n\nWrite an email response:"
+
     data = {
-        "params": {
-            "client_email": email_thread,
-            "goal": "write email response" if category != "CONSULTING FOLLOW UP" else "for each consulting email, we need to collect 1. Their use case & problem they are trying to solve 2. Their budget; Try to collect those info from them",
-        },
-        "project": "f86edbc1-fcb6-41f9-b9b6-be14a6f06412"
+        "prompt": prompt_text,
+        "temperature": 0.5,
+        "max_tokens": 150,
+        "top_p": 1.0,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "stop": ["\n"]
     }
 
-    # Send POST request
+    # Send POST request to OpenAI
     response = requests.post(url, headers=headers, json=data)
 
-    return response.text
+    # Parse the response and return the text
+    response_data = response.json()
+    return response_data["choices"][0]["text"].strip()
+
+
 
 
 class GenerateEmailResponseInput(BaseModel):
@@ -214,7 +253,7 @@ def scrape_website(objective: str, url: str):
 
     # Send the POST request
     response = requests.post(
-        "https://chrome.browserless.io/content?token=xxxxxxxxxxxxxxxxxxxxxxxxxxx", headers=headers, data=data_json)
+        "https://chrome.browserless.io/content?token=4b28d417-52e4-43fc-8d84-66db3a17230a", headers=headers, data=data_json)
 
     # Check the response status code
     if response.status_code == 200:
@@ -257,7 +296,7 @@ def search(query):
     })
 
     headers = {
-        'X-API-KEY': 'xxxxxxxxxxxxxxxxxxxxx',
+        'X-API-KEY': '742d67812339a3cb70a6820dfd9be7c927bd5cae',
         'Content-Type': 'application/json'
     }
 
@@ -335,7 +374,7 @@ class ProspectResearchTool(BaseTool):
 
 def escalate(original_email_address: str, message: str, additional_context: str):
     # URL to send the POST request to
-    url = 'https://hooks.zapier.com/hooks/catch/15616669/38qwq19/'
+    url = 'https://hooks.zapier.com/hooks/catch/16776116/3zt65ex/'
 
     # Data to send in the POST request
     data = {
