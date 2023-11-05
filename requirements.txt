@@ -1,7 +1,7 @@
 langchain
 python-dotenv
 openai
-
+uvicorn
 
 
 

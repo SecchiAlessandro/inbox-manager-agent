@@ -10,7 +10,7 @@ from langchain.chains.summarize import load_summarize_chain
 from langchain.schema import SystemMessage
 from custom_tools import CreateEmailDraftTool, GenerateEmailResponseTool, ReplyEmailTool, EscalateTool, ProspectResearchTool, CategoriseEmailTool
 from fastapi import FastAPI
-from pydantic import BaseModel
+#from pydantic import BaseModel
 
 
 
@@ -57,6 +57,9 @@ agent = initialize_agent(
     memory=memory,
 )
 
+#class Email(BaseModel):
+#    from_email: str
+#    content: str
 
 
 test_email = """
