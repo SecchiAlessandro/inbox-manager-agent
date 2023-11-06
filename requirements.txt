@@ -1,9 +1,9 @@
-langchain
+langchain==0.0.331
 python-dotenv
-openai
+openai==1.0.1
 uvicorn
-
-
+pydantic_core==2.12.0
+fastAPI
 
 # uncomment to use huggingface llms
 # huggingface-hub==0.14.1
