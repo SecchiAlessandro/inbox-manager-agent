@@ -39,7 +39,7 @@ class EmailRequest(BaseModel):
     email: str
 
 @app.post("/")
-async def home(email_request: EmailRequest):
+async def handle_post(email_request: EmailRequest):
     try:
         # Call the agent function with the provided email content
         system_message = SystemMessage(
