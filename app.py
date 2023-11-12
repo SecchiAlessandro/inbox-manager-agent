@@ -77,7 +77,6 @@ def InboxAI(email_request: EmailRequest):
     {email_request.email}
     """
     # Call the agent function with the provided email content
-  
     result = agent(input)
 
     # Return the result as part of the response

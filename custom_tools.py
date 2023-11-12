@@ -71,10 +71,15 @@ def categorise_email(lates_reply: str):
     CATEGORY (Return ONLY the category name in capital):
     """
 
-  category_result = client.completions.create(model="gpt-4",
-                                              prompt=categorise_prompt)
+  category_result = client.chat.completions.create(model="gpt-4",
+                                                   messages=[{
+                                                       "role":
+                                                       "user",
+                                                       "content":
+                                                       categorise_prompt
+                                                   }])
 
-  category = category_result.choices[0].text
+  category = category_result.choices[0].message.content
 
   if category == "JOB_OFFER/CONSULTING":
     all_needs_collected = check_consulting_email(lates_reply)
@@ -149,17 +154,6 @@ class CategoriseEmailTool(BaseTool):
 
 
 def generate_email_response(email_thread: str, category: str):
-  # URL endpoint for OpenAI
-  url = "https://api.openai.com/v1/engines/davinci-codex/completions"
-
-  # OpenAI API key
-  api_key = os.getenv("OPENAI_API_KEY")
-
-  # Headers with OpenAI API key
-  headers = {
-      "Content-Type": "application/json",
-      "Authorization": f"Bearer {api_key}"
-  }
 
   # Adjusted payload for OpenAI API
   prompt_text = email_thread
@@ -168,22 +162,21 @@ def generate_email_response(email_thread: str, category: str):
   else:
     prompt_text += "\n\nWrite an email response:"
 
-  data = {
-      "prompt": prompt_text,
-      "temperature": 0.5,
-      "max_tokens": 150,
-      "top_p": 1.0,
-      "frequency_penalty": 0.0,
-      "presence_penalty": 0.0,
-      "stop": ["\n"]
-  }
+  # Send request to OpenAI
+  completion = client.chat.completions.create(model='gpt-4',
+                                              messages=[{
+                                                  "role": "user",
+                                                  "content": prompt_text
+                                              }],
+                                              temperature=0.5,
+                                              max_tokens=150,
+                                              top_p=1.0,
+                                              frequency_penalty=0.0,
+                                              presence_penalty=0.0,
+                                              stop=["\n"])
 
-  # Send POST request to OpenAI
-  response = requests.post(url, headers=headers, json=data)
-
-  # Parse the response and return the text
-  response_data = response.json()
-  return response_data["choices"][0]["text"].strip()
+  return completion.choices[0].message.content
+  # strip() may be needed
 
 
 class GenerateEmailResponseInput(BaseModel):
