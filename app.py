@@ -1,6 +1,4 @@
-import os
 from dotenv import load_dotenv, find_dotenv
-import openai
 from langchain.agents import initialize_agent
 from langchain.agents import AgentType
 from langchain.chat_models import ChatOpenAI
@@ -17,7 +15,6 @@ from pydantic import BaseModel
 app = FastAPI()
 
 load_dotenv(find_dotenv())
-openai.api_key = os.environ.get("OPENAI_API_KEY")
 llm = ChatOpenAI(temperature=0, model="gpt-4-0613")
 
 
@@ -75,7 +72,13 @@ def InboxAI(email_request: EmailRequest):
         memory=memory,
     )
 
-    result = agent({"input": email_request.email})
+    input = f"""
+    New email received:
+    {email_request.email}
+    """
+    # Call the agent function with the provided email content
+  
+    result = agent(input)
 
     # Return the result as part of the response
     return {"output": result}
