@@ -244,7 +244,7 @@ def scrape_website(objective: str, url: str):
 
   # Send the POST request
   response = requests.post(
-      "https://chrome.browserless.io/content?token=4b28d417-52e4-43fc-8d84-66db3a17230a",
+      "https://inbox-manager-agent--alessandrosecch.repl.co/",
       headers=headers,
       data=data_json)
 
@@ -370,7 +370,7 @@ class ProspectResearchTool(BaseTool):
 def escalate(original_email_address: str, message: str,
              additional_context: str):
   # URL to send the POST request to
-  url = 'https://hooks.zapier.com/hooks/catch/16776116/3zt0f7t/'
+  url = 'https://inbox-manager-agent--alessandrosecch.repl.co/'
 
   # Data to send in the POST request
   data = {
@@ -423,7 +423,7 @@ def reply_email(message: str, email_address: str, subject: str):
   return f"An email has been sent to {email_address}"
 
   # URL to send the POST request to
-  url = 'https://hooks.zapier.com/hooks/catch/16776116/3zt0f7t/'
+  url = 'https://inbox-manager-agent--alessandrosecch.repl.co/'
 
   # Data to send in the POST request
   data = {"Email": email_address, "Subject": subject, "Reply": message}
@@ -464,7 +464,7 @@ class ReplyEmailTool(BaseTool):
 def create_email_draft(prospect_email_address: str, subject: str,
                        generated_reply: str):
   # URL to send the POST request to
-  url = 'https://hooks.zapier.com/hooks/catch/16776116/3zt0f7t/'
+  url = 'https://inbox-manager-agent--alessandrosecch.repl.co/'
 
   # Data to send in the POST request
   data = {
